@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#240b07">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lite Radio">
+<title>Lite Radio</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kaushan+Script&text=Lite%20Radio&display=swap">
+<style>
+:root{--bg:#240b07;--card:rgba(110,28,14,.62);--line:#9c3319;--cream:#f7e6cc;--gold:#e9992e;--org:#f0521c;--mute:#c9a58a}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cpath d='M22 3 41 22 22 41 3 22Z' fill='none' stroke='%23c4441f' stroke-opacity='.16' stroke-width='2'/%3E%3C/svg%3E");color:var(--cream);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.35;min-height:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--cream);outline-offset:2px}
+.app{max-width:520px;margin:0 auto;padding-bottom:170px;position:relative}
+.hero{position:relative;height:340px;overflow:hidden}
+.hero svg.bg{position:absolute;inset:0;width:100%;height:100%}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 62%,var(--bg))}
+.top{position:absolute;z-index:2;left:0;right:0;top:0;padding:calc(16px + env(safe-area-inset-top,0px)) 16px 0;display:flex;justify-content:flex-end;align-items:flex-start}
+.top button{padding:6px}
+.brand{position:absolute;z-index:2;left:0;right:0;top:calc(34px + env(safe-area-inset-top,0px));text-align:center;pointer-events:none}
+h1{font:400 3.3rem/1 "Kaushan Script","Brush Script MT",cursive;color:var(--cream);text-shadow:0 2px 12px rgba(80,10,0,.6)}
+.tag{margin-top:6px;color:var(--gold);letter-spacing:.2em;font-size:.78rem}
+.slogan{position:absolute;z-index:2;left:0;right:0;top:150px;text-align:center;font-size:1.45rem;font-weight:500;color:#f3c98f;text-shadow:0 1px 8px rgba(80,10,0,.7)}
+body:not([data-v=home]) .hero{height:120px;background:linear-gradient(#4a1006,#b8381a)}
+body:not([data-v=home]) .hero svg.bg{display:none}
+body:not([data-v=home]) .slogan{display:none}
+.g{display:none}
+body[data-g=home] .g-home{display:block}
+body[data-g=list] .g-list{display:block}
+.card{margin:-6px 14px 0;border:1px solid var(--line);border-radius:26px;background:var(--card);padding:16px;position:relative;z-index:3;backdrop-filter:blur(4px)}
+.badge{display:inline-flex;gap:6px;align-items:center;border:1px solid #8a2e18;border-radius:999px;padding:4px 12px;font-size:.78rem;letter-spacing:.06em;background:rgba(0,0,0,.18)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--org);display:inline-block}
+.row{display:flex;gap:16px;margin-top:12px}
+.art{flex:0 0 40%;aspect-ratio:1/.92;border-radius:14px;display:grid;place-items:center;background:radial-gradient(circle at 28% 34%,#ffb23a 0 13%,transparent 14%),linear-gradient(#d2491a,#4a1006);font-weight:900;font-size:2rem;font-style:italic;color:#ffe2a8;text-shadow:0 2px 6px rgba(0,0,0,.5)}
+.meta{flex:1;min-width:0}
+h2{font-size:1.6rem;font-weight:800;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sub{color:var(--gold);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eq{display:flex;align-items:center;gap:3px;height:28px;margin:10px 0}
+.eq span{width:3px;border-radius:2px;background:var(--org);height:calc(var(--h)*.55)}
+body.playing .eq span{animation:b 1s ease-in-out infinite alternate;animation-delay:var(--d)}
+@keyframes b{from{height:5px}to{height:var(--h)}}
+@media (prefers-reduced-motion:reduce){body.playing .eq span{animation:none}}
+.live{display:inline-flex;align-items:center;gap:6px;border:1px solid #8a2e18;border-radius:999px;padding:3px 12px;font-weight:700;background:rgba(0,0,0,.18)}
+.live .dot{background:#ff3b30}
+.gen{color:var(--mute);font-size:.88rem;margin-top:8px}
+.ctrl{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.rb{width:46px;height:46px;border-radius:50%;background:rgba(0,0,0,.28);display:grid;place-items:center}
+#play{width:68px;height:68px;border-radius:50%;background:var(--org);color:#fff;font-size:1.5rem;font-weight:800;box-shadow:0 6px 18px rgba(240,82,28,.4)}
+svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.favb{color:var(--org)}.favb.on svg{fill:var(--org)}
+.hd{display:flex;justify-content:space-between;align-items:center;margin:20px 16px 8px;color:var(--cream);font-weight:700;letter-spacing:.04em}
+.hd button{color:var(--gold);font-weight:500}
+.scroll{display:flex;gap:12px;overflow-x:auto;padding:2px 16px 12px;scroll-snap-type:x proximity}
+.tile{flex:0 0 78px;text-align:center;font-size:.8rem;scroll-snap-align:start}
+.lg{width:78px;height:68px;border-radius:16px;background:#f6e9d4;display:grid;place-items:center;font-weight:900;font-size:1.25rem;margin-bottom:6px}
+.tile span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#sq{display:none;margin:14px 16px 4px;width:calc(100% - 32px);padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.3);color:var(--cream);font:inherit}
+body[data-v=search] #sq{display:block}
+ul{list-style:none;padding:0;margin:8px 16px}
+li{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.25);border:1px solid #5a1a0e;border-radius:14px;margin-bottom:8px;padding-right:6px}
+li.on{border-color:var(--org)}
+li .pk{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:8px;text-align:left}
+li .lg{width:46px;height:42px;font-size:.95rem;margin:0;border-radius:10px;flex:0 0 46px}
+li .nm{display:block;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+li .st{display:block;font-size:.8rem;color:var(--mute)}
+.msg{margin:16px;color:var(--mute)}
+.fx{position:fixed;left:50%;transform:translateX(-50%);width:100%;max-width:520px;z-index:5}
+#mini{bottom:calc(66px + env(safe-area-inset-bottom,0px));padding:0 12px;display:none}
+#mini>div{display:flex;align-items:center;gap:12px;background:#5a1209;border:1px solid var(--line);border-radius:16px;padding:8px 12px}
+#mini .art{flex:0 0 44px;aspect-ratio:1;font-size:.8rem;border-radius:8px}
+#mini .meta{flex:1}
+#mini b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#mini small{color:var(--mute)}
+#mini .eq{margin:0;height:22px}
+#mplay{font-size:1.2rem;font-weight:800;padding:8px}
+nav{bottom:0;display:grid;grid-template-columns:repeat(4,1fr);background:#190604;border-top:1px solid #4a1409;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
+nav button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.74rem;color:var(--mute)}
+nav button[aria-current=true]{color:var(--org)}
+.slogan span{display:block;animation:float 6s ease-in-out infinite}
+.slogan span+span{animation-delay:-3s;animation-duration:7s}
+@keyframes float{0%,100%{transform:translate(0,0)}25%{transform:translate(8px,-7px)}50%{transform:translate(0,-12px)}75%{transform:translate(-8px,-5px)}}
+.drift{animation:drift var(--t) linear infinite;animation-delay:var(--d);transform:translate(-80px,var(--y))}
+@keyframes drift{from{transform:translate(-80px,var(--y))}to{transform:translate(480px,calc(var(--y) + var(--dy,0px)))}}
+.boat{animation:sail 30s ease-in-out infinite alternate}
+@keyframes sail{from{transform:translateX(0)}to{transform:translateX(90px)}}
+.bob{animation:bob 3.6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-3px) rotate(1.5deg)}}
+.wing{animation:flap .45s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes flap{to{transform:scaleY(.3)}}
+.shim{animation:shim 3s ease-in-out infinite alternate}
+.shim.b{animation-delay:-1.5s}
+@keyframes shim{from{opacity:.2}to{opacity:.85}}
+.pw{text-align:center;color:var(--mute);font-size:.8rem;margin:26px 0 0;opacity:.85}
+@media (prefers-reduced-motion:reduce){.slogan span,.drift,.boat,.bob,.wing,.shim{animation:none}.drift{transform:translate(120px,var(--y))}}
+.lg.pic{background:#f6e9d4;padding:6px}
+.lg img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
+li .lg.pic{padding:4px}
+.art img.al{width:62%;height:62%;object-fit:contain;background:#f6e9d4;border-radius:12px;padding:6px}
+#mini .art img.al{width:84%;height:84%;padding:3px;border-radius:6px}
+#inst{margin-right:auto;border:1px solid #f3c98f;border-radius:999px;padding:6px 14px;font-size:.8rem;color:var(--cream);background:rgba(0,0,0,.28)}
+.pw a{color:var(--gold)}
+</style>
+</head>
+<body data-v="home" data-g="home">
+<div class="app">
+  <section class="hero">
+    <svg class="bg" viewBox="0 0 400 340" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a1006"/><stop offset=".35" stop-color="#b8381a"/><stop offset=".6" stop-color="#f0881f"/><stop offset=".64" stop-color="#f7b648"/><stop offset="1" stop-color="#f7b648"/></linearGradient>
+        <linearGradient id="wt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9531c"/><stop offset="1" stop-color="#5a1608"/></linearGradient>
+        <radialGradient id="gl"><stop offset="0" stop-color="#ffe27a" stop-opacity=".9"/><stop offset="1" stop-color="#ffe27a" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="400" height="340" fill="url(#sk)"/>
+      <g class="drift" style="--t:70s;--d:-20s;--y:52px"><g fill="#ffd9a0" opacity=".32"><ellipse rx="38" ry="8"/><ellipse cx="20" cy="-7" rx="24" ry="8"/><ellipse cx="-20" cy="-5" rx="22" ry="7"/></g></g>
+      <g class="drift" style="--t:95s;--d:-55s;--y:122px"><g fill="#ffd9a0" opacity=".26"><ellipse rx="46" ry="9"/><ellipse cx="24" cy="-8" rx="28" ry="9"/><ellipse cx="-24" cy="-6" rx="26" ry="8"/></g></g>
+      <g class="drift" style="--t:58s;--d:-6s;--y:92px"><g fill="#ffe3b0" opacity=".22"><ellipse rx="30" ry="6"/><ellipse cx="14" cy="-5" rx="18" ry="6"/></g></g>
+      <circle cx="300" cy="205" r="50" fill="url(#gl)"/>
+      <circle cx="300" cy="205" r="15" fill="#ffe27a"/>
+      <path d="M0 208 50 192 110 204 170 186 232 206 300 210 360 194 400 206V222H0Z" fill="#5b1a0e"/>
+      <rect y="215" width="400" height="125" fill="url(#wt)"/>
+      <g class="shim" stroke="#ffd36a" stroke-linecap="round" stroke-width="2"><path d="M278 226h44M286 236h28M290 246h20"/></g>
+      <g class="shim b" stroke="#ffd36a" stroke-linecap="round" stroke-width="2"><path d="M270 231h60M280 241h40M286 252h28"/></g>
+      <g class="drift" style="--t:24s;--d:-4s;--y:70px;--dy:-22px"><g class="wing"><path d="M0 0q6-6 12 0q6-6 12 0" fill="none" stroke="#2a0e08" stroke-width="1.8" stroke-linecap="round"/></g></g>
+      <g class="drift" style="--t:31s;--d:-15s;--y:104px;--dy:-14px"><g class="wing" style="animation-duration:.55s"><path d="M0 0q5-5 10 0q5-5 10 0" fill="none" stroke="#2a0e08" stroke-width="1.6" stroke-linecap="round"/></g></g>
+      <g class="drift" style="--t:28s;--d:-22s;--y:136px;--dy:-18px"><g class="wing" style="animation-duration:.5s"><path d="M0 0q4-4 8 0q4-4 8 0" fill="none" stroke="#2a0e08" stroke-width="1.4" stroke-linecap="round"/></g></g>
+      <g class="boat"><g class="bob">
+        <path d="M92 203Q62 238 50 272L98 272Z" fill="#2a0e08"/>
+        <path d="M92 201V274" stroke="#2a0e08" stroke-width="2"/>
+        <path d="M40 274Q76 290 124 270L116 279Q76 298 40 274Z" fill="#2a0e08"/>
+      </g></g>
+    </svg>
+    <div class="top">
+      <button id="inst" hidden>Install app</button>
+      <svg width="44" height="44" viewBox="0 0 40 40" aria-label="Malawi flag"><clipPath id="fc"><circle cx="20" cy="20" r="20"/></clipPath><g clip-path="url(#fc)"><rect width="40" height="13.4" fill="#111"/><rect y="13.4" width="40" height="13.4" fill="#ce1126"/><rect y="26.7" width="40" height="13.3" fill="#198a3a"/><path d="M12 13.4a8 8 0 0 1 16 0Z" fill="#ce1126"/></g></svg>
+    </div>
+    <div class="brand"><h1>Lite Radio</h1><p class="tag">MALAWI • MUSIC • CULTURE</p></div>
+    <p class="slogan"><span>Feel Malawi.</span><span>Live the Vibe.</span></p>
+  </section>
+
+  <section class="g g-home card" aria-label="Now playing">
+    <span class="badge"><i class="dot"></i>NOW PLAYING</span>
+    <div class="row">
+      <div class="art" id="art">♪</div>
+      <div class="meta">
+        <h2 id="name">Pick a station</h2>
+        <p class="sub" id="sub">Tap a station below</p>
+        <div class="eq" id="eq"></div>
+        <span class="live"><i class="dot"></i>LIVE</span>
+        <p class="gen" id="gen">Stop a station to stop data use</p>
+      </div>
+    </div>
+    <div class="ctrl">
+      <button class="favb rb" id="fav" aria-label="Favourite" style="background:none"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-8-5.5-8-11a4.5 4.5 0 0 1 8-2.7A4.5 4.5 0 0 1 20 10c0 5.5-8 11-8 11z"/></svg></button>
+      <button class="rb" id="prev" aria-label="Previous station"><svg class="i" viewBox="0 0 24 24"><path d="M6 5v14M19 5 9 12l10 7z"/></svg></button>
+      <button id="play" aria-label="Play">▶</button>
+      <button class="rb" id="next" aria-label="Next station"><svg class="i" viewBox="0 0 24 24"><path d="M18 5v14M5 5l10 7-10 7z"/></svg></button>
+      <button class="favb rb" id="share" aria-label="Share" style="background:none"><svg class="i" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+    </div>
+  </section>
+
+  <section class="g g-home" aria-label="Popular stations">
+    <div class="hd"><span>POPULAR STATIONS</span><button id="all">View all ›</button></div>
+    <div class="scroll" id="pop"></div>
+  </section>
+
+  <section class="g g-list">
+    <input id="sq" type="search" placeholder="Search stations" aria-label="Search stations">
+    <ul id="list"></ul><p class="msg" id="msg">Loading stations…</p>
+  </section>
+
+  <footer class="pw">Station names and logos belong to their owners.<br><a href="privacy.html">Privacy Policy</a> • <a href="terms.html">Terms &amp; Conditions</a><br>Powered by nyasatech1</footer>
+</div>
+
+<div class="fx" id="mini"><div>
+  <div class="art" id="mart">♪</div>
+  <div class="meta"><b id="mname">–</b><small><i class="dot" style="background:#ff3b30"></i> LIVE</small></div>
+  <div class="eq" id="meq"></div>
+  <button id="mplay" aria-label="Play">▶</button>
+</div></div>
+
+<nav class="fx" aria-label="Main">
+  <button data-v="home" aria-current="true"><svg class="i" viewBox="0 0 24 24"><path d="M3 11 12 3l9 8v10h-6v-6H9v6H3z"/></svg>Home</button>
+  <button data-v="stations"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M7 8 17 3"/><circle cx="9" cy="14" r="2"/><path d="M14 13h4M14 16h4"/></svg>Stations</button>
+  <button data-v="search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 5 5"/></svg>Search</button>
+  <button data-v="fav"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-8-5.5-8-11a4.5 4.5 0 0 1 8-2.7A4.5 4.5 0 0 1 20 10c0 5.5-8 11-8 11z"/></svg>Favourites</button>
+</nav>
+<audio id="au" preload="none"></audio>
+
+<script>
+// Add your own Malawian stations here (stream URL must start with https:// to play).
+// Example: {name:"Station name", url:"https://example.com/stream", state:"Lilongwe", tags:"news,music", favicon:"https://example.com/logo.png"}
+const MY_STATIONS = [];
+const MIRRORS = ["https://de1.api.radio-browser.info","https://nl1.api.radio-browser.info","https://at1.api.radio-browser.info"];
+const $ = id => document.getElementById(id), au = $("au"), B = document.body;
+let all = [], cur = null, playing = false, favs = new Set(), base = MIRRORS[0];
+const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+try{favs = new Set(JSON.parse(store.get("lr_favs")||"[]"))}catch(e){}
+const sid = s => s.stationuuid || ("my-"+s.name), surl = s => s.url_resolved || s.url;
+const COLORS = ["#c0392b","#1e8449","#d68910","#1a5276","#7d3c98","#a93226"];
+const ini = n => { const w = n.replace(/[^A-Za-z0-9 ]/g,"").trim().split(/\s+/); if(/^[A-Z0-9]{2,4}$/.test(w[0])) return w[0]; return (w.length===1?w[0]:w.map(x=>x[0]).join("")).slice(0,3).toUpperCase(); };
+const col = n => COLORS[[...n].reduce((a,c)=>a+c.charCodeAt(0),0) % COLORS.length];
+const genres = s => { const t = (s.tags||"").split(",").map(x=>x.trim()).filter(Boolean).slice(0,4).map(x=>x[0].toUpperCase()+x.slice(1)); return t.length ? t.join(" • ") : "Live radio"; };
+const idx = () => all.findIndex(s => cur && sid(s)===sid(cur));
+
+for(const id of ["eq","meq"]){ const n = id==="eq"?30:6; for(let i=0;i<n;i++){ const s = document.createElement("span"); s.style.setProperty("--h",(8+Math.abs(Math.sin(i*1.7))*20)+"px"); s.style.setProperty("--d",(i*0.07)+"s"); $(id).append(s); } }
+
+async function load(){
+  const c = store.get("lr_cache");
+  if(c){ try{ all = merge(JSON.parse(c)); render(); }catch(e){} }
+  for(const m of MIRRORS){
+    try{
+      const r = await fetch(m+"/json/stations/bycountrycodeexact/MW?hidebroken=true&order=clickcount&reverse=true&limit=200");
+      if(!r.ok) continue;
+      const d = await r.json(); base = m;
+      store.set("lr_cache", JSON.stringify(d.map(s=>({stationuuid:s.stationuuid,name:s.name,url_resolved:s.url_resolved,tags:s.tags,state:s.state,favicon:s.favicon,homepage:s.homepage}))));
+      all = merge(d); render(); return;
+    }catch(e){}
+  }
+  if(!all.length) $("msg").textContent = "Can’t load stations. Check your connection and try again.";
+}
+function merge(api){
+  const seen = new Set(), out = [];
+  for(const s of [...MY_STATIONS, ...api]){ const n = (s.name||"").trim(); if(!n || !surl(s)) continue; const k = n.toLowerCase(); if(seen.has(k)) continue; seen.add(k); out.push({...s, name:n}); }
+  return out;
+}
+const bad = new Set(), good = new Map();
+const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ io.unobserve(e.target); if(e.target._go) e.target._go(); } }), {rootMargin:"120px"}) : null;
+function logoList(s){
+  const l = [];
+  if(s.favicon) l.push(s.favicon.replace(/^http:\/\//,"https://"));
+  try{ const h = new URL(s.homepage).hostname; if(h) l.push("https://www.google.com/s2/favicons?domain="+h+"&sz=128"); }catch(e){}
+  return l;
+}
+function tile(s){
+  const d = document.createElement("div"); d.className = "lg"; d.style.color = col(s.name); d.textContent = ini(s.name);
+  const k = sid(s), list = good.has(k) ? [good.get(k)] : logoList(s).filter(u => !bad.has(u));
+  if(!list.length) return d;
+  const next = i => {
+    if(i >= list.length) return;
+    const u = list[i], im = new Image(); im.alt = "";
+    im.onload = () => { if(im.naturalWidth <= 16){ bad.add(u); next(i+1); return; } good.set(k,u); d.textContent = ""; d.classList.add("pic"); d.append(im); };
+    im.onerror = () => { bad.add(u); next(i+1); };
+    im.src = u;
+  };
+  d._go = () => next(0);
+  io ? io.observe(d) : d._go();
+  return d;
+}
+function setArt(el, s){
+  el.textContent = s ? ini(s.name) : "♪";
+  const u = s && good.get(sid(s));
+  if(u){ el.textContent = ""; const im = new Image(); im.alt = ""; im.className = "al"; im.src = u; el.append(im); }
+}
+function render(){
+  const v = B.dataset.v, q = $("sq").value.trim().toLowerCase();
+  const pop = $("pop"); pop.textContent = "";
+  for(const s of all.slice(0,12)){ const b = document.createElement("button"); b.className = "tile"; const sp = document.createElement("span"); sp.textContent = s.name; b.append(tile(s), sp); b.onclick = () => play(s); pop.append(b); }
+  let rows = all;
+  if(v==="fav") rows = all.filter(s=>favs.has(sid(s)));
+  if(v==="search") rows = q ? all.filter(s=>s.name.toLowerCase().includes(q)) : [];
+  const ul = $("list"); ul.textContent = "";
+  for(const s of rows){
+    const li = document.createElement("li"); if(cur && sid(cur)===sid(s)) li.className = "on";
+    const b = document.createElement("button"); b.className = "pk";
+    const t = document.createElement("span"); t.innerHTML = '<span class="nm"></span><span class="st"></span>';
+    t.firstChild.textContent = s.name; t.lastChild.textContent = s.state || s.city || "Malawi";
+    b.append(tile(s), t); b.onclick = () => play(s);
+    const f = document.createElement("button"); f.className = "favb"; f.style.padding = "10px"; f.setAttribute("aria-label","Favourite "+s.name);
+    f.innerHTML = '<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-8-5.5-8-11a4.5 4.5 0 0 1 8-2.7A4.5 4.5 0 0 1 20 10c0 5.5-8 11-8 11z"/></svg>';
+    if(favs.has(sid(s))) f.classList.add("on");
+    f.onclick = () => toggleFav(s);
+    li.append(b, f); ul.append(li);
+  }
+  $("msg").textContent = rows.length ? "" : v==="fav" ? "No favourites yet. Tap the heart on a station to save it." : v==="search" ? (q ? "No stations match your search." : "Type a station name.") : (all.length ? "" : $("msg").textContent);
+}
+function toggleFav(s){ const i = sid(s); favs.has(i) ? favs.delete(i) : favs.add(i); store.set("lr_favs", JSON.stringify([...favs])); ui(); render(); }
+function ui(){
+  const s = cur;
+  $("name").textContent = s ? s.name : "Pick a station";
+  $("sub").textContent = s ? (s.state || s.city || "Malawi") : "Tap a station below";
+  $("gen").textContent = s ? genres(s) : "Stop a station to stop data use";
+  setArt($("art"), s); setArt($("mart"), s);
+  $("mname").textContent = s ? s.name : "–";
+  $("mini").style.display = s ? "block" : "none";
+  $("fav").classList.toggle("on", !!s && favs.has(sid(s)));
+  B.classList.toggle("playing", playing);
+  for(const id of ["play","mplay"]){ $(id).textContent = playing ? "❚❚" : "▶"; $(id).setAttribute("aria-label", playing ? "Stop" : "Play"); }
+}
+function play(s){
+  cur = s; au.src = surl(s); au.play().catch(fail);
+  if(s.stationuuid) fetch(base+"/json/url/"+s.stationuuid).catch(()=>{});
+  if("mediaSession" in navigator){ navigator.mediaSession.metadata = new MediaMetadata({title:s.name, artist:"Lite Radio"}); navigator.mediaSession.setActionHandler("pause", stop); navigator.mediaSession.setActionHandler("play", () => play(cur)); }
+  ui(); render();
+}
+function stop(){ au.pause(); au.removeAttribute("src"); au.load(); playing = false; ui(); }
+function fail(){ playing = false; $("gen").textContent = "Can’t play this station. It may be offline or not secure."; ui(); }
+function step(d){ if(!all.length) return; const i = idx(); play(all[(i + d + all.length) % all.length]); }
+function toggle(){ if(!cur){ if(all[0]) play(all[0]); return; } playing || au.getAttribute("src") ? stop() : play(cur); }
+$("play").onclick = $("mplay").onclick = toggle;
+$("prev").onclick = () => step(-1); $("next").onclick = () => step(1);
+$("fav").onclick = () => { if(cur) toggleFav(cur); };
+$("share").onclick = async () => { const d = {title:"Lite Radio", text: cur ? "Listening to "+cur.name+" on Lite Radio" : "Lite Radio", url:location.href}; try{ navigator.share ? await navigator.share(d) : await navigator.clipboard.writeText(d.text+" "+d.url); }catch(e){} };
+au.onplaying = () => { playing = true; ui(); };
+au.onerror = () => { if(au.getAttribute("src")) fail(); };
+$("sq").oninput = render;
+function view(v){
+  B.dataset.v = v; B.dataset.g = v==="home" ? "home" : "list";
+  document.querySelectorAll("nav button").forEach(b => b.setAttribute("aria-current", b.dataset.v===v));
+  render(); window.scrollTo(0,0); if(v==="search") $("sq").focus();
+}
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => view(b.dataset.v));
+$("all").onclick = () => view("stations");
+let dip = null;
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); dip = e; $("inst").hidden = false; });
+$("inst").onclick = async () => { if(!dip) return; dip.prompt(); try{ await dip.userChoice; }catch(e){} dip = null; $("inst").hidden = true; };
+addEventListener("appinstalled", () => { $("inst").hidden = true; });
+if("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+ui(); load();
+</script>
+</body>
+</html>
